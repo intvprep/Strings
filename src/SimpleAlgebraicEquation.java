@@ -11,30 +11,20 @@ public class SimpleAlgebraicEquation {
 	}
 	
 	public static int evaluate(String str){
-		char[] arr = str.toCharArray();
+		
 		Queue<String> queue = new LinkedList<String>();
-		int result = 0;
-		for(int i=0;i<arr.length;i++){
-			
-			char c = arr[i];
-			if(Character.isDigit(c)){
-				int j;
-				for(j=i;j<arr.length;j++){
-					if(!Character.isDigit(arr[j]))break;
-				}
-				result = Integer.parseInt(str.substring(i,j));
-				//System.out.println(result);
-				queue.offer(str.substring(i,j));
-				i = j-1;
-				
-				continue;
-			}
-			if(!Character.isDigit(c)){
-				queue.offer(""+c);
+		int j=0;
+		for(int i=0;i<str.length();i++){
+			if(str.charAt(i) == '+' || str.charAt(i) == '-' || str.charAt(i) == '*' ){
+				queue.offer(str.substring(j, i));
+				queue.offer(str.substring(i,i+1));
+				j=i+1;
 			}
 		}
+		queue.offer(str.substring(j));
 		
 		System.out.println(queue);
+		int result = 0;
 		while(!queue.isEmpty()){
 			String string = queue.poll();
 			if(isInteger(string)){
