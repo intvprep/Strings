@@ -11,47 +11,32 @@ public class SimpleAlgebraicEquation {
 	}
 	
 	public static int evaluate(String str){
-		
-		Queue<String> queue = new LinkedList<String>();
 		int j=0;
+		int total = 0;
+		String op="";
 		for(int i=0;i<str.length();i++){
 			if(str.charAt(i) == '+' || str.charAt(i) == '-' || str.charAt(i) == '*' ){
-				queue.offer(str.substring(j, i));
-				queue.offer(str.substring(i,i+1));
+				if(j==0){
+					total = Integer.valueOf(str.substring(j, i));
+				}else{
+					total = calculate(op, str.substring(j, i), total);
+				}
+				op = str.substring(i,i+1);
 				j=i+1;
 			}
 		}
-		queue.offer(str.substring(j));
-		
-		System.out.println(queue);
-		int result = 0;
-		while(!queue.isEmpty()){
-			String string = queue.poll();
-			if(isInteger(string)){
-				result = Integer.parseInt(string);
-			}else{
-				switch (string){
-				case "+": result+=Integer.parseInt(queue.poll());
-					break;
-				case "-": result-=Integer.parseInt(queue.poll());
-					break;
-				case "*": result*=Integer.parseInt(queue.poll());
-					break;
-				}
-			}
-		}
-		return result;
+		total = calculate(op, str.substring(j), total);
+		return total;
 	}
-	
-	public static boolean isInteger(String s) {
-	    try { 
-	        Integer.parseInt(s); 
-	    } catch(NumberFormatException e) { 
-	        return false; 
-	    } catch(NullPointerException e) {
-	        return false;
-	    }
-	    // only got here if we didn't return false
-	    return true;
+	public static int calculate(String op, String number, int total){
+		switch(op){
+			case "+": total+=Integer.valueOf(number);
+			break;
+			case "-": total -= Integer.valueOf(number);
+			break;
+			case "*": total*=Integer.valueOf(number);
+			break;
+		}
+		return total;
 	}
 }
